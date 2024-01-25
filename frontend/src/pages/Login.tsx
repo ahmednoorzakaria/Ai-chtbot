@@ -1,4 +1,5 @@
 import React from "react";
- export default  const Login ()=>{
+ const Login ()=>{
     return <div>Login</div>
  };
+ export default Login;
