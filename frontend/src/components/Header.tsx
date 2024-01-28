@@ -1,12 +1,16 @@
 import React from "react";
 import AppBar from "@mui/material/AppBar";
-import ToolBar from "@mui/material/ToolBar";
+import Toolbar from "@mui/material/Toolbar"; 
+import Logo from "./shared/Logo";
+
 const Header = () => {
   return (
     <AppBar
-      sx={{ bgcolor: "transparent", position: "static", boxshadow: "none" }}
+      sx={{ bgcolor: "transparent", position: "static", boxShadow: "none" }} // Corrected boxShadow
     >
-      <ToolBar sx={{ display: "flex" }}></ToolBar>
+      <Toolbar sx={{ display: "flex" }}>
+        <Logo />
+      </Toolbar>
     </AppBar>
   );
 };
