@@ -7,17 +7,18 @@ import Chat from "./pages/chat";
 import NotFound from "./pages/NotFound"; // Corrected component name
 
 function App() {
+  
   return (
     <main>
-      <Header>
+      <Header/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/chats" element={<Chat />} />
+          <Route path="/chat" element={<Chat />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </Header>
+    
     </main>
   );
 }
