@@ -48,7 +48,7 @@ export const userSignup = async (
       signed: true,
     });
 
-    return res.status(201).json({ message: "ok", id: User._id.toString() });
+    return res.status(201).json({ message: "ok", name:User.name,email:User.email });
   } catch (error) {
     console.error(error); // Log the error for debugging purposes
     return res.status(500).json({ message: "Error", cause: error.message });
@@ -63,6 +63,7 @@ export const userLogin = async (
   try {
     //user login
     const { email, password } = req.body;
+    console.log(email,password)
     const User = await user.findOne({ email });
     if (!User) {
       return res.status(401).send("User not registered");
@@ -88,7 +89,7 @@ export const userLogin = async (
       signed: true,
     });
 
-    return res.status(200).json({ message: "ok", id: User._id.toString() });
+    return res.status(200).json({ message: "ok", name:User.name,email:User.email });
   } catch (error) {
     console.error(error); // Log the error for debugging purposes
     return res.status(500).json({ message: "Error", cause: error.message });
