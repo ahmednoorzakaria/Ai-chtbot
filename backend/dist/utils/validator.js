@@ -28,11 +28,12 @@ export const loginValidator = [
         .withMessage("Password should contain at least one uppercase letter")
         .matches(/[a-z]/)
         .withMessage("Password should contain at least one lowercase letter")
-        .matches(/\d/)
-        .withMessage("Password should contain at least one number"),
 ];
 export const signupValidator = [
     body("name").notEmpty().withMessage("Name is required"),
     ...loginValidator,
+];
+export const chatCompletionValidator = [
+    body("name").notEmpty().withMessage("Message is required"),
 ];
 //# sourceMappingURL=validator.js.map

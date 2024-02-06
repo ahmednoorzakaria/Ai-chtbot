@@ -5,7 +5,7 @@ import {
   useState,
   ReactNode,
 } from "react";
-import { loginUser } from "../helpers/api-communicator";
+import { checkAuthStatus, loginUser } from "../helpers/api-communicator";
 
 type User = {
   name: string;
@@ -28,7 +28,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // Fetch if the user's cookies are valid to skip login
-    
+    async function checkStatus(){
+      const data = await checkAuthStatus();
+      if(data){
+        setUser({email:data.email,name:data.name});
+        setisLoggedIn(true);
+      }
+    }
+    checkStatus();
+
   }, []);
 
   const login = async (email: string, password: string) => {

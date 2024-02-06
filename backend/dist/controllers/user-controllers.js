@@ -39,7 +39,9 @@ export const userSignup = async (req, res, next) => {
             httpOnly: true,
             signed: true,
         });
-        return res.status(201).json({ message: "ok", name: User.name, email: User.email });
+        return res
+            .status(201)
+            .json({ message: "ok", name: User.name, email: User.email });
     }
     catch (error) {
         console.error(error); // Log the error for debugging purposes
@@ -75,7 +77,28 @@ export const userLogin = async (req, res, next) => {
             httpOnly: true,
             signed: true,
         });
-        return res.status(200).json({ message: "ok", name: User.name, email: User.email });
+        return res
+            .status(200)
+            .json({ message: "ok", name: User.name, email: User.email });
+    }
+    catch (error) {
+        console.error(error); // Log the error for debugging purposes
+        return res.status(500).json({ message: "Error", cause: error.message });
+    }
+};
+export const verifyUser = async (req, res, next) => {
+    try {
+        //user login
+        const User = await user.findById(res.locals.jwtData.id);
+        if (!User) {
+            return res.status(401).send("User not registered OR Token mulfunctioned");
+        }
+        if (User._id.toString() !== res.locals.jwtData.id) {
+            return res.status(401).send("Permission didnt match");
+        }
+        return res
+            .status(200)
+            .json({ message: "ok", name: User.name, email: User.email });
     }
     catch (error) {
         console.error(error); // Log the error for debugging purposes
