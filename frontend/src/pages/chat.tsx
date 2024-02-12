@@ -1,29 +1,86 @@
 import { Avatar, Box, Button, IconButton, Typography } from "@mui/material";
-import React, { useRef } from "react";
+import React, { useRef, useState, useLayoutEffect, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { red } from "@mui/material/colors";
-import { ChatItem } from "../components/chat/chat-item";
+import ChatItem from "../components/chat/chat-item";
+import { useNavigate } from "react-router-dom";
+
 import { IoMdSend } from "react-icons/io";
-import { sendChatRequest } from "../helpers/api-communicator";
+import {
+  getUserChats,
+  sendChatRequest,
+  deleteUserChat,
+} from "../helpers/api-communicator";
+import toast from "react-hot-toast";
+
 type Message = {
-  role: "user" | "assistant";
   content: string;
 };
 const Chat = () => {
+  const navigate = useNavigate();
+
   const auth = useAuth();
-  const [chatMessages, setChatMessages] = React.useState<Message[]>([]);
+  const [isLoading, setIsLoading] = useState(true); // Loading state
+
+  const [chatMessages, setChatMessages] = useState<Message[]>([]);
+
   const inputRef = useRef<HTMLInputElement | null>(null);
+
   const handleSubmit = async () => {
-    console.log(inputRef.current?.value);
-    const content = inputRef.current?.value as string;
     if (inputRef && inputRef.current) {
+      // Get the input value before clearing the input field
+      const content = inputRef.current.value;
+      console.log(content);
+
+      // Clear the input field
       inputRef.current.value = "";
+
+      // Create a new message object
+      const newMessage: Message = { content };
+
+      // Update the chat messages state
+      setChatMessages((prev) => [...prev, newMessage]);
+
+      // Send the chat request and wait for the response
+      try {
+        const chatData = await sendChatRequest(content);
+
+        // Once the response is received, update the chat messages state
+        setChatMessages([...chatData.chats]);
+      } catch (error) {
+        console.error("Error sending chat request:", error);
+      }
     }
-    const newMessage: Message = { role: "user", content };
-    setChatMessages((prev) => [...prev, newMessage]);
-    const chatData = await sendChatRequest(content);
-    setChatMessages([...chatData.chats]);
   };
+  const handleDeleteChats = async () => {
+    try {
+      toast.loading("Deleting Chats", { id: "deletechats" });
+      await deleteUserChat();
+      setChatMessages([]);
+      toast.success("Deleted Chats Successfully", { id: "deletechats" });
+    } catch (error) {
+      console.log(error);
+      toast.error("Deleting chats failed", { id: "deletechats" });
+    }
+  };
+  useLayoutEffect(() => {
+    if (auth?.isLoggedIn && auth.user) {
+      toast.loading("Loading Chats", { id: "loadchats" });
+      getUserChats()
+        .then((data) => {
+          setChatMessages([...data.chats]);
+          setIsLoading(false); // Set loading to false when messages are loaded
+          setResponseReceived(false); // Set response received to true
+
+          toast.success("Successfully loaded chats", { id: "loadchats" });
+        })
+        .catch((err) => {
+          console.log(err);
+          toast.error("Loading Failed", { id: "loadchats" });
+        });
+    }
+  }, [auth]);
+
   return (
     <Box
       sx={{
@@ -55,24 +112,25 @@ const Chat = () => {
         >
           <Avatar
             sx={{
-              ma: "auto",
+              mx: "auto",
               my: 2,
               bgcolor: "white",
               color: "black",
               fontWeight: 700,
             }}
           >
-            {auth?.user?.name[0]}
-            {auth?.user?.name.split("")[1][0]}
+            {auth?.user?.name ? auth.user.name.slice(0, 2) : "US"}
           </Avatar>
+
           <Typography sx={{ mx: "auto", fontFamily: "work sans" }}>
-            You are talking to a chat bot
+            You are talking to a ChatBOT
           </Typography>
           <Typography sx={{ mx: "auto", fontFamily: "work sans", my: 4, p: 3 }}>
             You can ask some questions related to Knowledge, Business, Advices,
-            Education, etc. But AVOID sharing personal and sensitive information
+            Education, etc. But avoid sharing personal information
           </Typography>
           <Button
+            onClick={handleDeleteChats}
             sx={{
               width: "200px",
               my: "auto",
@@ -100,10 +158,10 @@ const Chat = () => {
       >
         <Typography
           sx={{
-            mx: "auto",
             fontSize: "40px",
             color: "white",
             mb: 2,
+            mx: "auto",
             fontWeight: "600",
           }}
         >
@@ -119,45 +177,50 @@ const Chat = () => {
             flexDirection: "column",
             overflow: "scroll",
             overflowX: "hidden",
-            scrollBehavior: "smooth",
             overflowY: "auto",
+            scrollBehavior: "smooth",
           }}
         >
-          {chatMessages.map((chat, index) => (
-            //@ts-ignore
-            <ChatItem content={chat.content} role={chat.role} key={index} />
-          ))}
+          {isLoading ? (
+            <Typography>Loading...</Typography>
+          ) : (
+            chatMessages.map((chats, index) => (
+              <ChatItem
+                content={chats.content}
+                question={chats.question}
+                key={index}
+              />
+            ))
+          )}
         </Box>
-      </Box>
-      <div
-        style={{
-          width: "100%",
-          borderRadius: 8,
-          backgroundColor: "rgb(17,27,39)",
-          display: "flex",
-          margin: "auto",
-        }}
-      >
-        <input
-          ref={inputRef}
-          type="text"
+        <div
           style={{
             width: "100%",
-            backgroundColor: "transparent",
-            padding: "30px",
-            border: "none",
-            outline: "none",
-            color: "white",
-            fontSize: "20px",
+            borderRadius: 8,
+            backgroundColor: "rgb(17,27,39)",
+            display: "flex",
+            margin: "auto",
           }}
-        ></input>
-        <IconButton
-          sx={{ marginLeft: "auto", color: "white" }}
-          onClick={handleSubmit}
         >
-          <IoMdSend />
-        </IconButton>
-      </div>
+          {" "}
+          <input
+            ref={inputRef}
+            type="text"
+            style={{
+              width: "100%",
+              backgroundColor: "transparent",
+              padding: "30px",
+              border: "none",
+              outline: "none",
+              color: "white",
+              fontSize: "20px",
+            }}
+          />
+          <IconButton onClick={handleSubmit} sx={{ color: "white", mx: 1 }}>
+            <IoMdSend />
+          </IconButton>
+        </div>
+      </Box>
     </Box>
   );
 };

@@ -58,6 +58,7 @@ export const userSignup = async (
   }
 };
 
+
 export const userLogin = async (
   req: Request,
   res: Response,
@@ -122,5 +123,36 @@ export const verifyUser = async (
   } catch (error) {
     console.error(error); // Log the error for debugging purposes
     return res.status(500).json({ message: "Error", cause: error.message });
+  }
+};
+
+export const userLogout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    //user token check
+    const User = await user.findById(res.locals.jwtData.id);
+    if (!User) {
+      return res.status(401).send("User not registered OR Token malfunctioned");
+    }
+    if (User._id.toString() !== res.locals.jwtData.id) {
+      return res.status(401).send("Permissions didn't match");
+    }
+
+    res.clearCookie(COOKIE_NAME, {
+      httpOnly: true,
+      domain: "localhost",
+      signed: true,
+      path: "/",
+    });
+
+    return res
+      .status(200)
+      .json({ message: "OK", name: User.name, email: User.email });
+  } catch (error) {
+    console.log(error);
+    return res.status(200).json({ message: "ERROR", cause: error.message });
   }
 };

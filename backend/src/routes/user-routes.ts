@@ -1,6 +1,12 @@
 import { Router } from "express";
 import appRouter from "./index.js";
-import { getAllUsers, userLogin, userSignup, verifyUser } from "../controllers/user-controllers.js";
+import {
+    getAllUsers,
+    userLogin,
+    userLogout,
+    userSignup,
+    verifyUser,
+  } from "../controllers/user-controllers.js";
 import { validate, signupValidator, loginValidator } from "../utils/validator.js";
 import { verifyToken } from "../utils/token-manageger.js";
 
@@ -10,6 +16,7 @@ userRoutes.get("/", getAllUsers);
 userRoutes.post("/signup" ,validate(signupValidator),userSignup);
 userRoutes.post("/login" ,validate(loginValidator),userLogin);
 userRoutes.get("/auth-status",verifyToken,verifyUser)
+userRoutes.get("/logout", verifyToken, userLogout);
 
 
 export default userRoutes;
