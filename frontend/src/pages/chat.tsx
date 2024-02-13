@@ -29,13 +29,12 @@ const Chat = () => {
     if (inputRef && inputRef.current) {
       // Get the input value before clearing the input field
       const content = inputRef.current.value;
-      console.log(content);
 
       // Clear the input field
       inputRef.current.value = "";
 
       // Create a new message object
-      const newMessage: Message = { content };
+      const newMessage: Message = { content ,question:""};
 
       // Update the chat messages state
       setChatMessages((prev) => [...prev, newMessage]);
