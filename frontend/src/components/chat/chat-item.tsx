@@ -8,21 +8,7 @@ function extractCodeFromString(message: string) {
   }
 }
 
-function isCodeBlock(str: string) {
-  if (
-    str.includes("=") ||
-    str.includes(";") ||
-    str.includes("[") ||
-    str.includes("]") ||
-    str.includes("{") ||
-    str.includes("}") ||
-    str.includes("#") ||
-    str.includes("//")
-  ) {
-    return true;
-  }
-  return false;
-}
+
 const ChatItem = ({
   question,
   content,
@@ -34,8 +20,6 @@ const ChatItem = ({
     Array.isArray(content) ? content.join(" ") : content
   );
   const auth = useAuth();
-  console.log("content from chat-ITEM", content.join(""));
-
   return (
     <>
       {/* User Question */}

@@ -3,7 +3,6 @@ import  { useRef, useState, useLayoutEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { red } from "@mui/material/colors";
 import ChatItem from "../components/chat/chat-item";
-import { useNavigate } from "react-router-dom";
 
 import { IoMdSend } from "react-icons/io";
 import {
@@ -17,7 +16,6 @@ type Message = {
   content: string;
 };
 const Chat = () => {
-  const navigate = useNavigate();
 
   const auth = useAuth();
   const [isLoading, setIsLoading] = useState(true); // Loading state
@@ -70,7 +68,6 @@ const Chat = () => {
         .then((data) => {
           setChatMessages([...data.chats]);
           setIsLoading(false); // Set loading to false when messages are loaded
-          setResponseReceived(false); // Set response received to true
 
           toast.success("Successfully loaded chats", { id: "loadchats" });
         })

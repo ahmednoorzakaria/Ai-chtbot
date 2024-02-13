@@ -12,8 +12,8 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const email = formData.get("email");
-    const password = String(formData.get("password"));
+    const email = formData.get("email") as string | null; // Ensuring type is string or null
+  const password = formData.get("password") as string | null; // Ensuring type is string or null
 
     try {
       toast.loading("Signing In", { id: "login" });
