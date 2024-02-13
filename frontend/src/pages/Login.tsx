@@ -12,21 +12,19 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string | null; // Ensuring type is string or null
-    const password = formData.get("password") as string | null; // Ensuring type is string or null
-    if (typeof email === "string" && typeof password === "string") {
-      // Check if email and password are strings
-
-      try {
-        toast.loading("Signing In", { id: "login" });
-        await auth?.login(email, password);
-        toast.success("Signed In Succesfully", { id: "login" });
-      } catch (error) {
-        toast.error("Signing Failed", { id: "login" });
-        console.log(error);
-      }
+    const email = formData.get("email") || ""; // Use an empty string as default
+    const password = formData.get("password") || ""; // Use an empty string as default
+  
+    try {
+      toast.loading("Signing In", { id: "login" });
+      await auth?.login(email as string, password as string);
+      toast.success("Signed In Succesfully", { id: "login" });
+    } catch (error) {
+      toast.error("Signing Failed", { id: "login" });
+      console.log(error);
     }
   };
+  
   useEffect(() => {
     if (auth?.user) {
       return navigate("/chat");
