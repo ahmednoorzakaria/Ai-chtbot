@@ -34,7 +34,7 @@ const Chat = () => {
       inputRef.current.value = "";
 
       // Create a new message object
-      const newMessage: Message = { question,content:""};
+      const newMessage: Message = { question, content: "" };
 
       // Update the chat messages state
       setChatMessages((prev) => [...prev, newMessage]);
