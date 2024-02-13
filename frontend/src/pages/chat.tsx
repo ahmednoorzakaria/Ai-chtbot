@@ -28,20 +28,20 @@ const Chat = () => {
   const handleSubmit = async () => {
     if (inputRef && inputRef.current) {
       // Get the input value before clearing the input field
-      const content = inputRef.current.value;
+      const question = inputRef.current.value;
 
       // Clear the input field
       inputRef.current.value = "";
 
       // Create a new message object
-      const newMessage: Message = { content ,question:""};
+      const newMessage: Message = { question,content:""};
 
       // Update the chat messages state
       setChatMessages((prev) => [...prev, newMessage]);
 
       // Send the chat request and wait for the response
       try {
-        const chatData = await sendChatRequest(content);
+        const chatData = await sendChatRequest(question);
 
         // Once the response is received, update the chat messages state
         setChatMessages([...chatData.chats]);
