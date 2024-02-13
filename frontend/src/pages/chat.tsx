@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 
 type Message = {
   content: string;
+  question:string;
 };
 const Chat = () => {
 

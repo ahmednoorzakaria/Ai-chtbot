@@ -1,12 +1,6 @@
 import { Box, Avatar, Typography } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
 
-function extractCodeFromString(message: string) {
-  if (message.includes("```")) {
-    const blocks = message.split("```");
-    return blocks;
-  }
-}
 
 
 const ChatItem = ({
@@ -16,9 +10,7 @@ const ChatItem = ({
   question: string;
   content: string | string[];
 }) => {
-  const messageBlocks = extractCodeFromString(
-    Array.isArray(content) ? content.join(" ") : content
-  );
+  
   const auth = useAuth();
   return (
     <>
