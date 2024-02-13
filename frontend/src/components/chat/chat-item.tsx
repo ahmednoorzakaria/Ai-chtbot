@@ -1,10 +1,5 @@
-import React from "react";
 import { Box, Avatar, Typography } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
-// @ts-expect-error: Description goes here (3 characters or longer)
-import { coldarkDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-// @ts-expect-error: Description goes here (3 characters or longer)
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
 function extractCodeFromString(message: string) {
   if (message.includes("```")) {

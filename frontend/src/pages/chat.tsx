@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, IconButton, Typography } from "@mui/material";
-import React, { useRef, useState, useLayoutEffect, useEffect } from "react";
+import  { useRef, useState, useLayoutEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { red } from "@mui/material/colors";
 import ChatItem from "../components/chat/chat-item";

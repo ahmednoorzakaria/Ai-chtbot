@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import CustomizedInput from "../components/shared/CustomizedInput";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
