@@ -9,7 +9,7 @@ const app = express();
 
 //middlewares
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://ai-chtbot-o9fq-97bp61k2q-agriconnects-projects.vercel.app/",
     credentials:true}))
 app.use(express.json());
 app.use(morgan("dev"));
